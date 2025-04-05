@@ -37,6 +37,7 @@ void task2() {
    input_Stack_ascending(&Stack_2, amount);
    make_Stack_Resalt(Stack_1, Stack_2, Stack_Result);
    amount *= 2;
+   puts("Stack Result:");
    view_Stack(Stack_Result, amount);
    free_Stack(Stack_Result);
 }
