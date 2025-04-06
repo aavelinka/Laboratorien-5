@@ -73,39 +73,48 @@ void input_Stack_ascending(struct Stack** begin, int amount) {
     }
 }
 
-void make_Stack_Resalt(struct Stack* Stack_1, struct Stack* Stack_2, struct Stack *Stack_Result) {
-    struct Stack* current;
-    while(Stack_1 != NULL || Stack_2 != NULL) {
-        if(Stack_1 == NULL && Stack_2 != NULL) {
-            while(Stack_2 != NULL) {
-                Stack_Result->info = Stack_2->info;
-                current = Stack_2;
-                Stack_2 = Stack_2->next;
-                free(current);
-            }
-            break;
-        } else 
-        if(Stack_1 != NULL && Stack_2 == NULL) { 
-            while(Stack_1 != NULL) {
-                Stack_Result->info = Stack_1->info;
-                current = Stack_1;
-                Stack_1 = Stack_1->next;
-                free(current);
-            }
-            break;
-        } else
-        if(Stack_1->info > Stack_2->info) {
-            Stack_Result->info = Stack_1->info;
-            current = Stack_1;
-            Stack_1 = Stack_1->next;
-            free(current);
+void make_Stack_Resalt(struct Stack** Stack_1, struct Stack** Stack_2, struct Stack** Stack_Result) {
+    *Stack_Result = NULL;
+    struct Stack** current = Stack_Result;
+    
+    while (*Stack_1 != NULL || *Stack_2 != NULL) {
+        struct Stack* new_node = (struct Stack*)malloc(sizeof(struct Stack));
+        if (!new_node) {
+            puts("Memory allocation failed");
+            return;
+        }
+        
+        if (*Stack_1 == NULL) {
+            new_node->info = (*Stack_2)->info;
+            *current = new_node;
+            current = &((*current)->next);
+            struct Stack* temp = *Stack_2;
+            *Stack_2 = (*Stack_2)->next;
+            free(temp);
+        } else if (*Stack_2 == NULL) {
+            new_node->info = (*Stack_1)->info;
+            *current = new_node;
+            current = &((*current)->next);
+            struct Stack* temp = *Stack_1;
+            *Stack_1 = (*Stack_1)->next;
+            free(temp);
+        } else if ((*Stack_1)->info > (*Stack_2)->info) {
+            new_node->info = (*Stack_1)->info;
+            *current = new_node;
+            current = &((*current)->next);
+            struct Stack* temp = *Stack_1;
+            *Stack_1 = (*Stack_1)->next;
+            free(temp);
         } else {
-            Stack_Result->info = Stack_2->info;
-            current = Stack_2;
-            Stack_2 = Stack_2->next;
-            free(current);
+            new_node->info = (*Stack_2)->info;
+            *current = new_node;
+            current = &((*current)->next);
+            struct Stack* temp = *Stack_2;
+            *Stack_2 = (*Stack_2)->next;
+            free(temp);
         }
     }
+    *current = NULL;
 }
 
 void free_Stack(struct Stack* t) {
